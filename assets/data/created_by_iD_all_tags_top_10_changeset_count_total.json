@@ -1,1 +1,28 @@
-{"y_list":[56889863,51713281,50250787,47127503,39374165,8932881,5857919,4439419,3583627,3064088],"y_names":["imagery_used","comment","locale","host","changesets_count","hashtags","ideditor","source","resolved","warnings"]}
+{
+ "columns":[
+  "imagery_used",
+  "comment",
+  "locale",
+  "host",
+  "changesets_count",
+  "hashtags",
+  "ideditor",
+  "source",
+  "resolved",
+  "warnings"
+ ],
+ "data":[
+  [
+   68161034,
+   62984396,
+   61521859,
+   58398575,
+   50594313,
+   11456343,
+   7285193,
+   6565146,
+   5030685,
+   4154469
+  ]
+ ]
+}

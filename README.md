@@ -2,10 +2,11 @@
 
 Monthly updated statistics of OpenStreetMap. There is a [website](https://piebro.github.io/openstreetmap-statistics) to browse the generated plots and tables.
 
-The plots and tables are organized in topics and questions I asked myself about OpenStreetMap. My Motivation for this project was that I couldn't find some statistics I was interested in or that the data was outdated. That's why I created these statistics, which are easily updatable with a simple script run locally or with GitHub actions.
+The plots and tables are organized in topics and questions I asked myself about OpenStreetMap. My motivation for this project was that I couldn't find some statistics I was interested in or that the data was outdated. That's why I created these statistics, which are easily updatable with a simple script run locally or with GitHub actions.
 
 There is also a notebook to create [custom plots](https://piebro.github.io/openstreetmap-statistics/jupyter_lite/retro/notebooks/?path=custom_plots_browser.ipynb) with the data in a browser. You can use [this](https://github.com/piebro/openstreetmap-statistics/blob/master/src/custom_data_and_plots.ipynb) notebook if you want to create custom data with custom plots locally.
 
+I'm experimenting with a [website](https://piebro.github.io/openstreetmap-statistics/src/questions) to show the statistics. Many plots are still missing, but I might migrate them in the future and change it as the default starting page.
 
 ## Methodology
 
@@ -25,7 +26,7 @@ It's important to keep this in mind looking and interpreting the data.
 Another aspect is that the `created_by`, `imagery` and `source` tag use filters to determine the editing software and imagery.
 Some categories are opinionated (e.g., should stats for Android and iOS editing apps be counted separately?), and other categories could be very reasonable, depending on the purpose.
 The filtering process is done with simple rules to make it as transparent as possible and easily extendable by anyone.
-The rules are definded at [src/replace_rules_created_by.json](src/replace_rules_created_by.json) and [src/replace_rules_imagery_and_source.json](src/replace_rules_imagery_and_source.json).
+The rules are defined at [src/replace_rules_created_by.json](src/replace_rules_created_by.json) and [src/replace_rules_imagery_and_source.json](src/replace_rules_imagery_and_source.json).
 
 ### Editing Software
 
@@ -59,9 +60,9 @@ The code is tested on Ubuntu 20.04 but should work on every Linux distro. I'm no
 # Install dependencies for downloading and handling the latest changeset and showing a progress bar
 sudo apt install aria2 osmium-tool pv
 
-# create a vitual enviroment
-python3 -m venv /path/to/new/virtual/environment
-source venv/bin/activate
+# create a virtual environment
+python3 -m venv .venv
+source .venv/bin/activate
 
 # install python dependencies
 pip3 install -r requirements.txt
@@ -69,23 +70,35 @@ pip3 install -r requirements.txt
 
 Run the following commands to get the latest OSM changeset file.
 ```bash
+rm $(ls *.osm.bz2)
 wget -N https://planet.openstreetmap.org/planet/changesets-latest.osm.bz2.torrent
 aria2c --seed-time 0 --check-integrity changesets-latest.osm.bz2.torrent
 ```
 
-Next, you can extract the data and save it in a compressed CSV file like this. `pv` is used to generate a progress bar. The extraction can take some time (on my laptop this takes about 1:10h).
+Next, you can extract the data and save it in a compressed CSV file like this. `pv` is used to generate a progress bar. The extraction can take some time (on my laptop this takes about 1:30h).
 ```bash
-osmium cat --output-format opl $(ls *.osm.bz2) | pv -s 130M -l | python3 src/save_changesets_csv.py temp
+rm -r -d temp
+osmium cat --output-format opl $(ls *.osm.bz2) | pv -s 140M -l | python3 src/changeset_to_parquet.py temp
 ```
 
 If you want to add new topics, plots or tables and iterate faster with a subset of all data, you can use every 500th changeset like this.
 ```bash
-osmium cat --output-format opl $(ls *.osm.bz2) | pv -s 130M -l | sed -n '0~500p' | python3 src/save_changesets_csv.py temp_dev
+osmium cat --output-format opl $(ls *.osm.bz2) | pv -s 140M -l | sed -n '0~500p' | python3 src/changeset_to_parquet.py temp_dev
 ```
 
-Next, you can generate the plots and tables like the following command or with `temp_dev` instead of `temp` for the folder name. If you create a new topic, you can add it to the `generate_plots.sh` script. On my laptop this takes also about 1:10h and it runs with less then 8GB of RAM.
+Next, you can generate the plots and tables like the following command or with `temp_dev` instead of `temp` for the folder name. On my laptop this takes also about 0:30h and it runs with less then 8GB of RAM.
 ```bash
-python3 src/data_crunching_and_saving.py temp
+python3 src/parquet_to_json_stats.py temp
+```
+
+### Update notebooks
+
+There are multiple question in `src/questions` and each one has a jupyter notebook to compute the relevant data for the question. To Execute all notebooks run:
+
+```bash
+for notebook in $(find src/questions -name calculations.ipynb); do
+    jupyter nbconvert --to notebook --execute "$notebook" --output calculations.ipynb
+done
 ```
 
 ### Update cooperation user names
@@ -98,6 +111,7 @@ python3 src/save_corporation_contributors.py
 ### Update Jupyter Lite Notebook
 
 ```bash
+pip install jupyterlite-core==0.1.0 jupyterlab~=3.5.1 jupyterlite-pyodide-kernel==0.0.6
 jupyter lite build --contents src/custom_plots_browser.ipynb --output-dir jupyter_lite
 ```
 
@@ -123,14 +137,17 @@ If there are other topics and questions about OpenStreetMap you think are intere
 Also, if you see any typos or other mistakes, feel free to correct them and create a pull request.
 
 Another valuable way to contribute is to add editing software or imagery sources to [src/replace_rules_created_by.json](src/replace_rules_created_by.json) and [src/replace_rules_imagery_and_source.json](src/replace_rules_imagery_and_source.json).
-This can make the statistics more accurate.
+The cmd `python3 src/finde_new_replace_rule_candidates.py temp` can be used to find new impactful candidates to add to the rules.
+Adding rules can make the statistics more accurate and links help with the usability.
+[JSON sorter](https://r37r0m0d3l.github.io/json_sort/) with `four spaces` can be used to sort and format the json correctly.
 
-You can use `black -l 120 .` in the project root diretory to run the python code formatter [Black](https://pypi.org/project/black/) befor committing code.
-
+The Projected uses [Ruff](https://github.com/astral-sh/ruff) for linting and formatting. Run `ruff check` and `ruff format` in the project root directory tu use it.
+[Prettier](https://prettier.io/playground/) is used for linting the javascript code with a `print-width` of 120, `tab-width` of 4 and [Stylelint](https://stylelint.io/demo/) is used for linting css code.
+Furthermore, [Codespell](https://github.com/codespell-project/codespell) is used to find spelling mistakes and can be used with this command `codespell src README.md index.html assets/statistic_website.js`.
 
 ## Website Statistics
 
-There is lightweight tracking with [Plausible](https://plausible.io/about) for the [website](https://piebro.github.io/openstreetmap-statistics/) to get infos about how many people are visiting. Everyone who is interested can look at these stats here: https://plausible.io/piebro.github.io%2Fopenstreetmap-statistics?period=30d. Only users without an AddBlocker are counted, so these statistics are under estimating the actual count of visitors. I would guess that quite a few people (including me) visiting the site have an AddBlocker.
+There is lightweight tracking with [Plausible](https://plausible.io/about) for the [website](https://piebro.github.io/openstreetmap-statistics/) to get infos about how many people are visiting. Everyone who is interested can look at these stats here: https://plausible.io/piebro.github.io%2Fopenstreetmap-statistics?period=30d. Only users without an AdBlocker are counted, so these statistics are under estimating the actual count of visitors. I would guess that quite a few people (including me) visiting the site have an AdBlocker.
 
 
 ## License
