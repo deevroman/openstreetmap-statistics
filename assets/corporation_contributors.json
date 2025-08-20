@@ -1,4 +1,14 @@
 {
+    "AMAT": [
+        "https://wiki.openstreetmap.org/wiki/Agenzia_mobilit%C3%A0_ambiente_territorio",
+        [
+            "Balaabirami",
+            "Khanev%21%",
+            "Marco_Belluschi",
+            "Moncecchi%20%Daniele",
+            "N%C3%A1dudvari%20%Tam%C3%A1s"
+        ]
+    ],
     "Amazon": [
         "https://wiki.openstreetmap.org/wiki/Organised_Editing/Activities/Amazon",
         [
@@ -1731,6 +1741,24 @@
             "rvoight_EG",
             "saldana%40%expedia",
             "tyler_expedia"
+        ]
+    ],
+    "FixMyCity": [
+        "https://wiki.openstreetmap.org/wiki/FixMyCity_GmbH",
+        [
+            "FMC-Henri",
+            "StefanHRT",
+            "Supaplex030",
+            "fmc_1",
+            "fmc_2",
+            "fmc_3",
+            "fmc_4",
+            "fmc_5",
+            "fmc_6",
+            "fmc_7",
+            "fmc_8",
+            "hejco",
+            "tordans"
         ]
     ],
     "GOAT": [
@@ -3630,6 +3658,7 @@
     "Ozon": [
         "https://wiki.openstreetmap.org/wiki/Organised_Editing/Activities/Ozon",
         [
+            "NatalieVvln",
             "Ozon%20%OSM1",
             "Ozon%20%OSM10",
             "Ozon%20%OSM12",
@@ -3646,7 +3675,9 @@
             "Ozon%20%OSM8",
             "Ozon%20%OSM9",
             "Ozon_OSM11",
-            "geo_ozon"
+            "addr:",
+            "geo_ozon",
+            "vrrdv"
         ]
     ],
     "Rocketdata.io": [
