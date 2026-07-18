@@ -4,7 +4,8 @@
             "ADDR "
         ]
     },
-    "AED Map": {
+    "AED Map App": {
+        "link": "https://aedmapa.pl/",
         "starts_with": [
             "AED Map "
         ],
@@ -94,6 +95,12 @@
     "Busy Hours": {
         "starts_with": [
             "Busy Hours "
+        ]
+    },
+    "Cartes": {
+        "link": "https://wiki.openstreetmap.org/wiki/FR:Cartes",
+        "starts_with": [
+            "Cartes.app "
         ]
     },
     "catatom3dfix": {
@@ -258,9 +265,6 @@
         ],
         "type": "tool"
     },
-    "https://aed.openstreetmap.org.pl": {
-        "link": "https://aed.openstreetmap.org.pl"
-    },
     "https://osm.wikidata.link/": {
         "ends_with": [
             ".wikidata.link/"
@@ -292,8 +296,12 @@
         ],
         "type": "mobile_editor"
     },
-    "IsraelHiking.osm.org.il": {
-        "link": "https://israelhiking.osm.org.il/"
+    "Israel Hiking Map": {
+        "link": "https://israelhiking.osm.org.il/",
+        "starts_with": [
+            "IsraelHiking.osm.org.il",
+            "https://israelhiking.osm.org.il"
+        ]
     },
     "Jeff's Uploader": {
         "starts_with": [
@@ -456,17 +464,17 @@
             "nsr2osm "
         ]
     },
-    "openaedmap.org": {
+    "OpenAEDMap Website": {
         "aliases": [
             "https://openaedmap.org"
         ],
         "link": "https://openaedmap.org",
-        "type": "desktop_editor"
-    },
-    "openaedmap-backend": {
         "starts_with": [
-            "openaedmap-backend "
-        ]
+            "openaedmap.org ",
+            "openaedmap-backend ",
+            "https://aed.openstreetmap.org.pl"
+        ],
+        "type": "desktop_editor"
     },
     "OpenBeerMap": {
         "starts_with": [
@@ -645,6 +653,7 @@
         "type": "tool"
     },
     "OsmAPP": {
+        "link": "https://wiki.openstreetmap.org/wiki/OsmAPP",
         "starts_with": [
             "OsmAPP "
         ]
