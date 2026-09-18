@@ -792,7 +792,8 @@
         "link": "https://github.com/confusedbuffalo/phone-report",
         "starts_with": [
             "osm-phone-report/"
-        ]
+        ],
+        "type": "tool"
     },
     "PHP": {
         "starts_with": [
